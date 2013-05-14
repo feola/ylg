@@ -86,15 +86,14 @@
 ;; (def/route about ("about")
 ;;   (path "content/about.org"))
 
-
-(restas:mount-submodule -css- (#:restas.directory-publisher)
-  (restas.directory-publisher:*baseurl* '("css"))
+(restas:mount-module -css- (#:restas.directory-publisher)
+  (:url "/css/")
   (restas.directory-publisher:*directory* (path "css/")))
 
-(restas:mount-submodule -js- (#:restas.directory-publisher)
-  (restas.directory-publisher:*baseurl* '("js"))
+(restas:mount-module -js- (#:restas.directory-publisher)
+  (:url "/js/")
   (restas.directory-publisher:*directory* (path "js/")))
 
-(restas:mount-submodule -img- (#:restas.directory-publisher)
-  (restas.directory-publisher:*baseurl* '("img"))
+(restas:mount-module -img- (#:restas.directory-publisher)
+  (:url "/img/")
   (restas.directory-publisher:*directory* (path "img/")))
