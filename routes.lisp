@@ -138,6 +138,7 @@
 					 (cons "dislike" (getf votes :dislike)))))))
 
 
+
 (restas:define-route choices ("/choices")
   (tpl:root (list :left (tpl:left)
                   :right (tpl:choiceslist (list :choices (mapcar #'(lambda (choice-pair)
@@ -284,6 +285,6 @@
   (:url "/img/")
   (restas.directory-publisher:*directory* (path "img/")))
 
-(restas:mount-submodule -pic- (#:restas.directory-publisher)
-  (restas.directory-publisher:*baseurl* '("pic"))
+(restas:mount-module -pic- (#:restas.directory-publisher)
+  (:url "pic")
   (restas.directory-publisher:*directory* (path "pic/")))
