@@ -20,17 +20,29 @@
                  (:module "usr"
                           :serial t
                           :pathname "mod/usr"
-                          :components ((:file "usr")))
+                          :components ((:file "usr")
+                                       (:file "routes")))
                  (:module "pht"
                           :serial t
                           :pathname "mod/pht"
                           :components ((:file "pht")))
+                 (:module "vot"
+                          :serial t
+                          :pathname "mod/vot"
+                          :components ((:file "vot")))
                  (:module "ily"
                           :serial t
                           :pathname "mod/ily"
                           :components ((:file "ily")
-                                       (:static-file "tpl.htm")
-                                       (:file "routes")))
+                                       (:static-file "tpl.htm")))
+                 (:module "adv"
+                          :serial t
+                          :pathname "mod/adv"
+                          :components ((:file "adv")))
+		 (:module "cmt"
+                          :serial t
+                          :pathname "mod/cmt"
+                          :components ((:file "cmt")))
                  (:file "render")
                  (:file "routes")
                  (:file "init")))

@@ -15,7 +15,6 @@
            :append-link
            :replace-all
            :define-entity
-           :define-action
            :define-automat))
 
 (in-package #:lib)
@@ -129,15 +128,8 @@
                        (if (funcall func x)
                            (push x rs)))
                    (,all-entity))
-           rs))
+           (reverse rs)))
        )))
-
-
-(defmacro define-action (name params &body body)
-  `(defun ,name ()
-     (let ,(loop :for param :in params :collect
-              `(,param (getform ,(intern (symbol-name param) :keyword))))
-       ,@body)))
 
 
 (defmacro define-automat (name desc &rest tail)

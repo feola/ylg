@@ -7,26 +7,58 @@
                           :ensure-generic-function
                           :defgeneric
                           :standard-generic-function
-                          :class-name))
+                          :class-name)
+  (:export :get-look :all-look :find-look :vote-look :show-look-list))
 
 (in-package #:ily)
 
-(closure-template:compile-template :common-lisp-backend (ylg:path "mod/ily/tpl.htm"))
-
+;(closure-template:compile-template :common-lisp-backend (ylg:path "mod/ily/tpl.htm"))
 
 (define-automat look "Автомат look-а"
-  ((timestamp :timestamp)
-   (target    :target)
-   (goods     :goods)
-   (votes     :votes)
-   (comments  :comments))
+  ((timestamp   :timestamp)
+   (target      :target)
+   (goods       :goods)
+   (votes       :votes)
+   (preview     :pic)
+   (pic         :pic)
+   (comments    :comments))
   (:draft :public :archived)
   ((:draft   :public    :publish-look)
    (:public  :archived  :archive-look)))
 
 
+(defun show-look-list (looks)
+  (tpl:lookslist (list :looks (mapcar #'(lambda (look-pair)
+                                          (let ((look (car look-pair))
+                                                (id (cdr look-pair)))
+                                            (list :id id
+                                                  :timestamp (ily::timestamp look)
+                                                  :target (ily::target look)
+                                                  :votes (ily::votes look)
+                                                  :preview (ily::preview look)
+                                                  )))
+                                      looks))))
 
-;; View/Controller
+
+(defun vote-look (look-id voting &optional (current-user usr:*current-user*))
+  (let ((vote (vot:make-vote :entity-id look-id
+                             :entity 'look
+                             :user-id (usr::find-user (usr::get-user current-user))
+                             :voting voting))
+        (look (get-look look-id)))
+    (setf (votes look)
+          (append (votes look)
+                  (list (vot:find-vote vote))))))
+
+
+;;(vote-look 1 1 3)
+
+;;(vot::vote-summary 'ily::look 1)
+;; (votes (get-look 1))
+;; (vot:all-vote)
+;; (vot:entity-id (vot:get-vote 3))
+;; (vot:entity-id (vot::get-vote 2))
+
 
 ;; (defun show-create ()
 ;;   "ook"
@@ -54,6 +86,9 @@
 ;;   "ook")
 
 
+
+
+
 ;; Tests
 
 ;; Owner создает look,
@@ -65,7 +100,37 @@
 (make-look :timestamp (get-universal-time)
            :target '("club")
            :goods  '("shoes" "hat")
-           :votes  'votes
+           :votes  nil
+           :preview "1x.jpg"
+           :pic "1.jpg"
+           :comments 'comments
+           :state :draft)
+
+
+(make-look :timestamp (get-universal-time)
+           :target '("club2")
+           :goods  '("shoes2" "hat2")
+           :votes  nil
+           :preview "2x.jpg"
+           :pic "2.jpg"
+           :comments 'comments
+           :state :draft)
+
+(make-look :timestamp (get-universal-time)
+           :target '("club2")
+           :goods  '("shoes2" "hat2")
+           :votes  nil
+           :preview "3x.jpg"
+           :pic "3.jpg"
+           :comments 'comments
+           :state :draft)
+
+(make-look :timestamp (get-universal-time)
+           :target '("club2")
+           :goods  '("shoes2" "hat2")
+           :votes  nil
+           :preview "4x.jpg"
+           :pic "4.jpg"
            :comments 'comments
            :state :draft)
 
@@ -86,8 +151,14 @@
   (print 'pub))
 
 (takt (get-look 1) :public :publish-look)
+(takt (get-look 2) :public :publish-look)
+(takt (get-look 3) :public :publish-look)
+(takt (get-look 4) :public :publish-look)
+
+
 
 (assert (equal :public (state (get-look 1))))
+
 
 ;; Голосование
 ;; TODO
